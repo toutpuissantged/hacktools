@@ -2,7 +2,8 @@
 
 ## prerequis ##
 
-avoir python 3.x installer 
+Avoir python 3.x installer 
+Etre sous windows avec les droits d'administrateur 
 
 ### installation ###
 
