@@ -9,6 +9,21 @@ def toast():
 	print('reloaded ...')
 	#sys.exit()
 
+def auth():
+	isvalide=False
+	print('veillez vous authenntifier ...')
+	id=input(' ')
+	if id=='gedeon':
+		isvalide=True
+	else:
+		isvalide=False
+
+	if isvalide:
+		print('heureux de vous revoir ')
+	else:
+		print('identifiant de connexion invalide')
+	
+
 def scraping():
 	isvalide=False
 	loop=0
@@ -16,10 +31,11 @@ def scraping():
 		try:
 			data=rq.get('http://sobricom.net/login')
 			isvalide=True
-			time.sleep(1)
+			
 		except :
 			loop+=1
-		if loop>=100:
+			time.sleep(1)
+		if loop>=10:
 			loop=0
 			os.system('netsh wlan connect name="SOBRI MMM5"')
 			print('erreur de connexion')
@@ -66,9 +82,11 @@ def ConnexionCheck():
 				time.sleep(1)
 
 		if notconected>=3:
+			notconected=0
 			loop=False
 
 		if tour>=5:
+			tour=0
 			os.system('netsh wlan connect name="SOBRI MMM5"')
 			print('not connected to wifi')
 
