@@ -11,19 +11,25 @@ def toast():
 
 def scraping():
 	isvalide=False
+	loop=0
 	while not isvalide:
 		try:
-			time.sleep(2)
 			data=rq.get('http://sobricom.net/login')
 			isvalide=True
+			time.sleep(1)
 		except :
+			loop+=1
+		if loop>=100:
+			loop=0
+			os.system('netsh wlan connect name="SOBRI MMM5"')
 			print('erreur de connexion')
+			time.sleep(1)
 
 	dataParse=data.text
 	soup = BeautifulSoup(data.content, 'html.parser')
 	link=soup.find_all("a")[0].get('href')
 	#link=soup.find('a').get('href')
-	wb.open(link)
+	wb.open_new(link)
 	print('link is ',link)
 
 
@@ -36,7 +42,9 @@ def ConnexionCheck():
 	print('connexion check')
 	Itime=time.time()
 	loop=True
-	refresh=60*4
+	refresh=60*4+40
+	notconected=0
+	tour=0
 	while loop:
 		curtime=time.time()
 		if curtime >=Itime+refresh:
@@ -44,14 +52,26 @@ def ConnexionCheck():
 		else:
 			try:
 				rq.get('http://sobricom.net/login')
-				try:
-					rq.get('http://www.google.com')
-				except:
-					loop=False
-					print('no internet  connexion')
+				if curtime >=Itime+10:
+					try:
+						time.sleep(1)
+						rq.get('https://www.google.com/')
+					except:
+						#loop=False
+						notconected+=1
+						print('no internet  connexion')
+
 			except:
-				os.system('netsh wlan connect name="SOBRI MMM5"')
-				print('not connected to wifi')
+				tour+=1
+				time.sleep(1)
+
+		if notconected>=3:
+			loop=False
+
+		if tour>=5:
+			os.system('netsh wlan connect name="SOBRI MMM5"')
+			print('not connected to wifi')
+
 		time.sleep(2)
 
 
