@@ -61,6 +61,8 @@ def ConnexionCheck():
 	refresh=60*4+40
 	notconected=0
 	tour=0
+	max_notconected=3
+	max_tour=3
 	while loop:
 		curtime=time.time()
 		if curtime >=Itime+refresh:
@@ -81,11 +83,11 @@ def ConnexionCheck():
 				tour+=1
 				time.sleep(1)
 
-		if notconected>=5:
+		if notconected>=max_notconected:
 			notconected=0
 			loop=False
 
-		if tour>=5 or tour==1:
+		if tour>=max_tour or tour==1:
 			tour=0
 			os.system('netsh wlan connect name="SOBRI MMM5"')
 			print('not connected to wifi')
