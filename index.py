@@ -81,11 +81,11 @@ def ConnexionCheck():
 				tour+=1
 				time.sleep(1)
 
-		if notconected>=3:
+		if notconected>=5:
 			notconected=0
 			loop=False
 
-		if tour>=5:
+		if tour>=5 or tour==1:
 			tour=0
 			os.system('netsh wlan connect name="SOBRI MMM5"')
 			print('not connected to wifi')
