@@ -1,15 +1,23 @@
-import os
+import os ,sys
 import time
 import requests as rq
 import sys
 from bs4 import BeautifulSoup
 import webbrowser as wb
 
+os.system('cls' if os.name=='nt' else 'clear')
+
 def toast():
+	'''  
+		permet de faire des notif a chaque reload de la boucle pricipale 
+	'''
 	print('reloaded ...')
 	#sys.exit()
 
 def auth():
+	'''
+		se charge de l'autentification 
+	'''
 	isvalide=False
 	print('veillez vous authenntifier ...')
 	id=input(' ')
@@ -25,6 +33,10 @@ def auth():
 	
 
 def scraping():
+	'''
+		soccupe de recuperer le liens de free trial et 
+		l'ouvre dans un nouvel onglet du navigateur par defaut
+	'''
 	isvalide=False
 	loop=0
 	while not isvalide:
@@ -50,19 +62,27 @@ def scraping():
 
 
 def macChanger():
+	'''
+		change aleatoirement l'adresse mac 
+	'''
 	os.system('tmac -n Wi-Fi -nr02 -re -s')
 	#os.system('TMAC/tmac.exe -n Wi-Fi -nr02 -re -s')
 	print('mac mis a jour ')
 
 def ConnexionCheck():
+	'''
+		le composent intelligent du core : verifier et resout les probleme de 
+		connexion au wifi et a internet 
+	'''
 	print('connexion check')
 	Itime=time.time()
 	loop=True
 	refresh=60*4+40
 	notconected=0
-	tour=0
+	tour=1
 	max_notconected=3
-	max_tour=3
+	max_tour=5
+	first_loop=True
 	while loop:
 		curtime=time.time()
 		if curtime >=Itime+refresh:
@@ -87,15 +107,25 @@ def ConnexionCheck():
 			notconected=0
 			loop=False
 
-		if tour>=max_tour or tour==1:
+		if tour>=max_tour :
 			tour=0
 			os.system('netsh wlan connect name="SOBRI MMM5"')
 			print('not connected to wifi')
+
+		if first_loop==True and tour>=2:
+			
+			os.system('netsh wlan connect name="SOBRI MMM5"')
+			first_loop=False
+			print('not connected to wifi @ first loop')
+			time.sleep(3)
 
 		time.sleep(2)
 
 
 def main():
+	'''
+		boucle principale 
+	'''
 	print('hacktools start ...')
 	Iloop=True
 	Isleep=60*4+40
@@ -104,10 +134,8 @@ def main():
 	while Iloop:
 		macChanger()
 		scraping()
-		#sys.exit()
 		toast()
 		ConnexionCheck()
-		#time.sleep(Isleep)
 
 main()
 
