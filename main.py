@@ -1,11 +1,17 @@
-import os ,sys
-import time
-import requests as rq
-import sys
-from bs4 import BeautifulSoup
-import webbrowser as wb
+from modules import * 
 
 os.system('cls' if os.name=='nt' else 'clear')
+
+def header():
+    f = Figlet(font='bulbhead')
+    print(f.renderText('hack tools'))
+
+config={
+
+	'ssid':'SOBRICOM',
+	'url':'http://sobricom.net/login',
+	'ssid_list':['SOBRI MMM5','SOBRICOM','SOBRICOM 2'],
+}
 
 def toast():
 	'''  
@@ -41,7 +47,7 @@ def scraping():
 	loop=0
 	while not isvalide:
 		try:
-			data=rq.get('http://sobricom.net/login')
+			data=rq.get(config['url'])
 			isvalide=True
 			
 		except :
@@ -49,7 +55,7 @@ def scraping():
 			time.sleep(1)
 		if loop>=10:
 			loop=0
-			os.system('netsh wlan connect name="SOBRI MMM5"')
+			os.system('netsh wlan connect name="{}"'.format(config['ssid']))
 			print('erreur de connexion')
 			time.sleep(1)
 
@@ -77,7 +83,7 @@ def ConnexionCheck():
 	print('connexion check')
 	Itime=time.time()
 	loop=True
-	refresh=60*4+40
+	refresh=60*4+30
 	notconected=0
 	tour=1
 	max_notconected=3
@@ -88,11 +94,11 @@ def ConnexionCheck():
 		if curtime >=Itime+refresh:
 			loop=False
 		else:
+			time.sleep(1)
 			try:
 				rq.get('http://sobricom.net/login')
 				if curtime >=Itime+10:
 					try:
-						time.sleep(1)
 						rq.get('https://www.google.com/')
 					except:
 						#loop=False
@@ -101,7 +107,6 @@ def ConnexionCheck():
 
 			except:
 				tour+=1
-				time.sleep(1)
 
 		if notconected>=max_notconected:
 			notconected=0
@@ -109,12 +114,12 @@ def ConnexionCheck():
 
 		if tour>=max_tour :
 			tour=0
-			os.system('netsh wlan connect name="SOBRI MMM5"')
+			os.system('netsh wlan connect name="{}"'.format(config['ssid']))
 			print('not connected to wifi')
 
-		if first_loop==True and tour>=2:
+		if first_loop==True and tour==2:
 			
-			os.system('netsh wlan connect name="SOBRI MMM5"')
+			os.system('netsh wlan connect name="{}"'.format(config['ssid']))
 			first_loop=False
 			print('not connected to wifi @ first loop')
 			time.sleep(3)
@@ -126,7 +131,7 @@ def main():
 	'''
 		boucle principale 
 	'''
-	print('hacktools start ...')
+	header()
 	Iloop=True
 	Isleep=60*4+40
 	Itime=time.time()
