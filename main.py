@@ -2,16 +2,38 @@ from modules import *
 
 os.system('cls' if os.name=='nt' else 'clear')
 
-def header():
-    f = Figlet(font='bulbhead')
-    print(f.renderText('hack tools'))
+global wifi_used
 
 config={
 
-	'ssid':'SOBRICOM',
+	'ssid':'SOBRI MMM5',
 	'url':'http://sobricom.net/login',
-	'ssid_list':['SOBRI MMM5','SOBRICOM','SOBRICOM 2'],
+	'ssid_list':['SOBRI MMM5','SOBRICOM','SOBRICOM 2','WIFI FOZANE 2'],
 }
+
+wifi_used=config['ssid']
+
+def configLoad():
+	temp1=open('core/version.json','r')
+	temp2=temp1.read()
+	temp1.close()
+
+	temp3=json.loads(temp2)
+
+	return temp3
+
+def header():
+	f = Figlet(font='bulbhead')
+	print(f.renderText('hack tools'))
+	conf=configLoad()
+	print("version {}  by anonymous13 \n".format(conf['version']))
+	auth()
+	print("demarage du moteur ...")
+
+def Connect(ssid):
+	call=os.system('netsh wlan connect name="{}"'.format(ssid))
+	#print('not connected to wifi ||| call :{}'.format(call))
+	return call
 
 def toast():
 	'''  
@@ -25,17 +47,20 @@ def auth():
 		se charge de l'autentification 
 	'''
 	isvalide=False
-	print('veillez vous authenntifier ...')
-	id=input(' ')
-	if id=='gedeon':
+	login='gedeon'
+	print(' veillez vous authentifier : ')
+	id=input(' ==> ')
+	if id==login:
 		isvalide=True
 	else:
 		isvalide=False
 
 	if isvalide:
-		print('heureux de vous revoir ')
+		print('authentification reussi !')
 	else:
-		print('identifiant de connexion invalide')
+		print('identifiant de connexion invalide \n fermeture du moteur !!!')
+		time.sleep(0.5)
+		exit()
 	
 
 def scraping():
@@ -45,6 +70,8 @@ def scraping():
 	'''
 	isvalide=False
 	loop=0
+	global wifi_used
+	
 	while not isvalide:
 		try:
 			data=rq.get(config['url'])
@@ -55,8 +82,7 @@ def scraping():
 			time.sleep(1)
 		if loop>=10:
 			loop=0
-			os.system('netsh wlan connect name="{}"'.format(config['ssid']))
-			print('erreur de connexion')
+			call=Connect(wifi_used)
 			time.sleep(1)
 
 	dataParse=data.text
@@ -65,7 +91,6 @@ def scraping():
 	#link=soup.find('a').get('href')
 	wb.open_new(link)
 	print('link is ',link)
-
 
 def macChanger():
 	'''
@@ -83,13 +108,19 @@ def ConnexionCheck():
 	print('connexion check')
 	Itime=time.time()
 	loop=True
-	refresh=60*4+30
+	refresh=60*4+30 # temps de rafraichissement 
 	notconected=0
 	tour=1
 	max_notconected=3
 	max_tour=5
 	first_loop=True
+	first_loop_state=1
+	wifi_used_id=0
+	global wifi_used
+
 	while loop:
+		wifi_used=config['ssid_list'][wifi_used_id]
+
 		curtime=time.time()
 		if curtime >=Itime+refresh:
 			loop=False
@@ -114,14 +145,18 @@ def ConnexionCheck():
 
 		if tour>=max_tour :
 			tour=0
-			os.system('netsh wlan connect name="{}"'.format(config['ssid']))
-			print('not connected to wifi')
+			Connect(wifi_used)
 
-		if first_loop==True and tour==2:
+		if first_loop==True :
 			
-			os.system('netsh wlan connect name="{}"'.format(config['ssid']))
-			first_loop=False
-			print('not connected to wifi @ first loop')
+			first_loop_state=Connect(wifi_used)
+			if first_loop_state:
+				first_loop=True
+			else:
+				first_loop=False
+    				
+			#first_loop=False
+			print('@ first loop')
 			time.sleep(3)
 
 		time.sleep(2)
@@ -132,11 +167,11 @@ def main():
 		boucle principale 
 	'''
 	header()
-	Iloop=True
-	Isleep=60*4+40
-	Itime=time.time()
+	#Iloop=True
+	#Isleep=60*4+40
+	#Itime=time.time()
 
-	while Iloop:
+	while True:
 		macChanger()
 		scraping()
 		toast()
@@ -144,4 +179,4 @@ def main():
 
 main()
 
-### wifi hacker by anonymous13 ###
+### hack tools by anonymous13 ###
