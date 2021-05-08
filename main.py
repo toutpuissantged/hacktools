@@ -92,7 +92,7 @@ class HackTools(object):
 			seconde=' {}s'.format(data['seconde'])
 
 		print(" > {} : {} \t  reload : {} \t --- {} --- \t user > {} \t active time >{} {} {} ".format(self.state['wifi-name'],self.state['statut'],self.state['reload'],self.state['app-name'],self.state['username'],heures,minutes,seconde),end="\r")
-		time.sleep(1)
+		#time.sleep(1)
 
 	def header(self):
 		'''
@@ -115,6 +115,8 @@ class HackTools(object):
 			developer pour windows , les utilisateurs linux 
 
 		'''
+
+		self.ConnexionCheck()
 		cmd = 'netsh wlan connect name="{}"'.format(ssid)
 		rep=subprocess.call(cmd)
 		return 0
@@ -164,6 +166,7 @@ class HackTools(object):
 		'''
 		#os.system('tmac -n Wi-Fi -nr02 -re -s')
 		subprocess.call('tmac -n Wi-Fi -nr02 -re -s')
+		self.state['reload']+=1
 		
 		print('mac mis a jour ')
 
