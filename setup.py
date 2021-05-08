@@ -14,4 +14,4 @@ setup(  name = "hacktools",
         version = "2.0",
         description = "automatisation application to exploit fail in web app by toutpuissantged",
        # options = {"build_exe": build_exe_options},
-        executables = [Executable("main2.py", base=base)])
+        executables = [Executable("main.py", base=base)])

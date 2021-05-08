@@ -31,11 +31,12 @@ class HackTools(object):
 			},
 		}
 		self.state={
-            'statut':'connected',
+            'statut':'disconnected',
             'reload':0,
             'wifi-name':'Sobri mimi',
-            'username':'gedeon',
-            'app-name':'HACKTOOLS,'
+            'username':'?',
+            'app-name':'HACKTOOLS',
+			'start-time':time.time()
 
         }
 		self.wifi_used=self.config['ssid']
@@ -48,15 +49,65 @@ class HackTools(object):
 	def arg_pars(self):
 		pass
 
+	def time_builder(self,timer):
+		timer=int(timer)
+		time_schema={
+			'heures':0,
+			'minutes':0,
+			'seconde':0,
+		}
+
+		minute=timer//60
+		time_schema['seconde']=timer
+		if (minute<1):
+			return time_schema
+		seconde=timer%60
+		minute=timer//60
+		time_schema['seconde']=seconde
+		time_schema['minutes']=minute
+		if (minute//60<1):
+			return time_schema
+
+		heures=minute//60
+		minute=minute%60
+		time_schema['heures']=heures
+		time_schema['minutes']=minute
+
+		return time_schema
+
+	def showConnectedInfo(self):
+
+		os.system('cls' if os.name=='nt' else 'clear')
+		data=self.time_builder(time.time()-self.state['start-time'])
+		heures=''
+		minutes=''
+		seconde=''
+		if(data['heures']>0):
+			heures=' {}h'.format(data['heures'])
+
+		if(data['minutes']>0):
+			minutes=' {}m'.format(data['minutes'])
+
+		if(data['seconde']>0):
+			seconde=' {}s'.format(data['seconde'])
+
+		print(" > {} : {} \t  reload : {} \t --- {} --- \t user > {} \t active time >{} {} {} ".format(self.state['wifi-name'],self.state['statut'],self.state['reload'],self.state['app-name'],self.state['username'],heures,minutes,seconde),end="\r")
+		time.sleep(1)
+
 	def header(self):
 		'''
 			permet de presenter l'application en exposent la version utiliser ,
 			le nom , le developeur etc ...
 
 		'''
-		print('hack tools')
-		print("version {}  by anonymous13 \n".format(self.version))
-		print("demarage du moteur ...")
+
+		print(" --------------- hack tools  version {}  by anonymous13  ---------- \n".format(self.version))
+		print(" ---------------- demarage du moteur ... -------------------")
+		res=input('\n En continuent vous accepter etre l\'unique responsable de l\'utilisation que vous faites de cet logiciel qu\'il s\'agit de piratage ou autres action efeectuer sur un reseau qui n\'est pas le votre ainsi vous assumer entirement toutes poursuite judicaire occasionner ? Oui/Non ')
+		if(res!='Oui'):
+			print('\n ====> ok donc allez vous faire ')
+			time.sleep(2)
+			sys.exit()
 
 	def Connect(self,ssid):
 		'''
@@ -94,7 +145,7 @@ class HackTools(object):
 
 		dataParse=data.text
 		soup = BeautifulSoup(data.content, 'html.parser')
-		link=soup.find_all("a")[0].get('href')
+		self.link=soup.find_all("a")[0].get('href')
 		#link=soup.find('a').get('href')
 		wb.open(self.link)
 		self.state['statut']= 'connecting ...'
@@ -135,6 +186,7 @@ class HackTools(object):
 		wifi_used_id=0
 
 		while loop:
+			self.showConnectedInfo()
 			curtime=time.time()
 			if curtime >=Itime+refresh:
 				loop=False
@@ -191,6 +243,7 @@ class HackTools(object):
 		os.system('cls' if os.name=='nt' else 'clear')
 		self.header()
 		while True:
+			self.showConnectedInfo()
 			self.macChanger()
 			self.scraping()
 			self.ConnexionCheck()
