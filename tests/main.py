@@ -1,11 +1,4 @@
-import os ,sys
-import time
-import requests as rq
-import sys
-import json
-import webbrowser as wb
-
-from bs4 import BeautifulSoup
+from modules import * 
 
 os.system('cls' if os.name=='nt' else 'clear')
 
@@ -25,15 +18,17 @@ def ia():
 	pass
 
 def configLoad():
+	temp1=open('core/version.json','r')
+	temp2=temp1.read()
+	temp1.close()
 
-	temp3={
-        "version":"1.1"
-    }
+	temp3=json.loads(temp2)
 
 	return temp3
 
 def header():
-	print(' #################### hack tools ##################### ')
+	f = Figlet(font='bulbhead')
+	print(f.renderText('hack tools'))
 	conf=configLoad()
 	print("version {}  by anonymous13 \n".format(conf['version']))
 	#auth()

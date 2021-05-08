@@ -2,7 +2,7 @@ from cx_Freeze import setup, Executable
 import sys
 
 # Dependencies are automatically detected, but it might need fine tuning.
-build_exe_options = {"packages": ["os"], "excludes": ["tkinter"]}
+#build_exe_options = {"packages": ["os"], "excludes": ["tkinter"]}
 
 # GUI applications require a different base on Windows (the default is for
 # a console application).
@@ -11,7 +11,7 @@ base = None
 #    base = "Win32GUI"
 
 setup(  name = "hacktools",
-        version = "0.1",
-        description = "My GUI application!",
+        version = "2.0",
+        description = "automatisation application to exploit fail in web app by toutpuissantged",
        # options = {"build_exe": build_exe_options},
-        executables = [Executable("dist.py", base=base)])
+        executables = [Executable("main2.py", base=base)])

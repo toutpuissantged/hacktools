@@ -1,3 +1,6 @@
 change-mac
 build
 dist
+__pycache__
+*/__pycache__
+TMAC
